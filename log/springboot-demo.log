@@ -1,0 +1,9 @@
+2025-09-12 00:00:16.433 [main] INFO  o.e.s.SpringbootDemoApplicationTests.logStarting - Starting SpringbootDemoApplicationTests using Java 1.8.0_351 on bogon with PID 64198 (started by abcnull in /Users/abcnull/IdeaProjects/springboot-demo)
+2025-09-12 00:00:16.442 [main] INFO  o.e.s.SpringbootDemoApplicationTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2025-09-12 00:00:16.458 [background-preinit] INFO  o.h.validator.internal.util.Version.<clinit> - HV000001: Hibernate Validator 6.2.5.Final
+2025-09-12 00:00:17.812 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.multipleStoresDetected - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-12 00:00:17.819 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-12 00:00:17.861 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 30 ms. Found 0 Redis repository interfaces.
+2025-09-12 00:00:20.597 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping.<init> - Adding welcome page: class path resource [static/index.html]
+2025-09-12 00:00:22.151 [main] INFO  c.a.a.spring.ArthasConfiguration.arthasAgent - Arthas agent start success.
+2025-09-12 00:00:23.294 [main] INFO  o.e.s.SpringbootDemoApplicationTests.logStarted - Started SpringbootDemoApplicationTests in 7.459 seconds (JVM running for 8.904)

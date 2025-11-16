@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.springbootdemo.mapper.StudentMapper">
+
+    <!-- table column 到 pojo field 的映射 -->
+    <!-- => Student -->
+    <resultMap id="studentResultMap" type="org.example.springbootdemo.model.Student">
+        <id column="student_id" property="studentId"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="school_class_id" property="schoolClassId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <!-- => StudentSchoolClassDTO -->
+    <resultMap id="studentSchoolClassResultMap" type="org.example.springbootdemo.dto.StudentSchoolClassDTO">
+        <id column="student_id" property="studentId"/>
+        <result column="name" property="name"/>
+        <result column="class_num" property="classNum"/>
+    </resultMap>
+
+    <!-- sql tag 公共字段 -->
+    <sql id="studentColumns">
+        student_id
+        , name, age, school_class_id
+    </sql>
+
+    <!-- 根据学号查询学生信息 -->
+    <!--
+    查询出来的数据字段是下划线，mybatis 默认无法通过 resultType 映射到小驼峰到 Student 类变量中，解法是：
+    1.方式一：resultMap 声明映射（企业级开发更倾向于这种方式）
+    2.方式二：mybatis 开启下划线到驼峰的映射
+        mybatis:
+            configuration:
+                map-underscore-to-camel-case: true
+    3.方式三：sql 编写给字段起别名，比如 student_id as studentId
+     -->
+    <select id="selectStudentById" resultMap="studentResultMap">
+        select *
+        from student
+        where student_id = #{student_id}
+    </select>
+
+    <!-- 插入学生信息 -->
+    <!--
+     parameterType 一般情况下可以省略不写，mybatis 能自动推断出来类型，但是写上能更直观清晰，推荐写生的比如当入参是 pojo 实体类
+     parameterType 能自动推断入参的数据类型，比如：
+     - 基本数据类型：int，long，boolean 等
+     - 包装数据类型：Integer，Long 等
+     - String 类型
+     - 自定义的 pojo 对象：比如 Student，User 等
+     - 集合类型：比如 List，Map 等
+     -->
+    <insert id="insertStudent" parameterType="org.example.springbootdemo.model.Student">
+        insert into student (name, age, school_class_id)
+        values (#{name}, #{age}, #{schoolClassId})
+    </insert>
+
+    <!-- 根据学号更新学生信息 -->
+    <update id="updateStudent" parameterType="org.example.springbootdemo.model.Student">
+        update student
+        set name            = #{name},
+            age             = #{age},
+            school_class_id = #{schoolClassId}
+        where student_id = #{studentId}
+    </update>
+
+    <!-- 根据学号软删除学生信息 -->
+    <update id="updateStudentIsDeletedById">
+        update student
+        set is_deleted = 1
+        where student_id = #{student_id}
+    </update>
+
+    <!-- 根据学号硬删除学生信息 -->
+    <delete id="deleteStudentById">
+        delete
+        from student
+        where student_id = #{student_id}
+    </delete>
+
+    <!-- 根据学生姓名，分页查询学生信息 -->
+    <select id="selectStudentByPage" resultMap="studentResultMap">
+        select *
+        from student
+        where name = #{name}
+    </select>
+
+    <!-- 根据学生姓名，分页查询学生信息 -->
+    <select id="selectStudentWithLimit" resultMap="studentResultMap">
+        select *
+        from student
+        where name = #{name} limit #{offset}
+            , #{pageSize}
+    </select>
+
+    <!-- 根据学生姓名，左连接查询 student 表和 school_class 表 -->
+    <!-- left join 返回 student 表存在的所有记录 -->
+    <select id="selectStudentSchoolClass" resultMap="studentSchoolClassResultMap">
+        select s.student_id, s.name, sc.class_num
+        from student s
+                 left join school_class sc
+                           on s.school_class_id = sc.school_class_id
+        where name = #{name}
+    </select>
+
+    <!-- student full join school_class -->
+    <!-- full join 返回 2 表中只要有 1 表存在的所有记录 -->
+    <select id="selectStudentSchoolClass2" resultMap="studentSchoolClassResultMap">
+        select s.student_id, s.name, sc.class_num
+        from student s
+                 full join school_class sc
+                           on s.school_class_id = sc.school_class_id
+        where name = #{name}
+    </select>
+
+    <!-- student inner join school_class -->
+    <!-- inner join 返回 2 表中都需要存在的所有记录 -->
+    <select id="selectStudentSchoolClass3" resultMap="studentSchoolClassResultMap">
+        select s.student_id, s.name, sc.class_num
+        from student s
+                 inner join school_class sc
+                            on s.school_class_id = sc.school_class_id
+        where name = #{name}
+    </select>
+
+    <!-- student = school_class -->
+    <!-- 等价于 inner join -->
+    <select id="selectStudentSchoolClass4" resultMap="studentSchoolClassResultMap">
+        select s.student_id, s.name, sc.class_num
+        from student s,
+             school_class sc
+        where s.school_class_id = sc.school_class_id
+          and name = #{name}
+    </select>
+
+    <!-- 依据 name 查询 student -->
+    <select id="selectStudentByName" resultMap="studentResultMap">
+        select *
+        from student
+        where name = #{name}
+    </select>
+
+    <!-- if tag -->
+    <insert id="insertStudentIfTag" parameterType="org.example.springbootdemo.model.Student">
+        insert into student
+        (name
+        <if test="age != null and age != 0">, age</if>
+        <if test="is_deleted != null">, is_deleted</if>
+        )
+        values
+        (#{name}
+        <if test="age != null and age != 0">, #{age}</if>
+        <if test="is_deleted != null">, #{isDeleted}</if>
+        )
+    </insert>
+
+    <!-- where tag -->
+    <select id="selectStudentWhereTag" resultMap="studentResultMap">
+        select * from student
+        <where>
+            <if test="name != null">and name like concat('%', #{name}, '%')</if>
+            <if test="age != null and age > 0">and age = #{age}</if>
+        </where>
+    </select>
+
+    <!-- set tag -->
+    <update id="updateStudentSetTag" parameterType="org.example.springbootdemo.model.Student">
+        update student
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="age != null and age > 0">age = #{age},</if>
+        </set>
+        where is_deleted = #{isDeleted}
+    </update>
+
+    <!-- choose/when/otherwise tag -->
+    <select id="selectStudentChooseTag" resultMap="studentResultMap">
+        select * from student
+        <where>
+            <choose>
+
+                <!-- 条件：name 不为空的情况下，再去匹配 name -->
+                <when test="name != null and name != ''">
+                    name like concat('%', #{name},'%')
+                </when>
+
+                <!-- 可选: 默认情况，如果以上条件都不满足 -->
+                <otherwise>
+                    1=1 <!-- 或者留空，但留空时 <where> 标签会处理 -->
+                </otherwise>
+            </choose>
+            and age = #{age}
+        </where>
+    </select>
+
+    <!-- foreach tag -->
+    <!--
+    插入时：
+    <insert id="batchInsertUsers">
+        INSERT INTO users (username, email)
+        VALUES
+        <foreach item="user" collection="list" separator=",">
+            (#{user.username}, #{user.email})
+        </foreach>
+    </insert>
+    -->
+    <select id="selectStudentForeachTag" resultMap="studentResultMap">
+        select * from student
+        <where>
+            <if test="names != null and !names.isEmpty()">
+                name in
+                <foreach item="name" collection="names" open="(" separator="," close=")">
+                    #{name}
+                </foreach>
+            </if>
+            <if test="names == null or names.isEmpty()">
+                1=0  <!-- 当条件不满足时返回空结果集 -->
+            </if>
+        </where>
+    </select>
+
+    <!-- trim tag -->
+    <!-- prefix="前缀", suffix="后缀", prefixOverrides="要移除的前缀内容", suffixOverrides="要移除的后缀内容" -->
+    <select id="selectStudentTrimTag" resultMap="studentResultMap">
+        select * from student
+        <trim prefix="where" suffixOverrides="or">
+            name = #{name} or
+        </trim>
+    </select>
+
+    <!-- bind tag -->
+    <!-- 也支持三元表达式
+    <select id="getUsers" resultType="User">
+        <bind name="filterName" value="name != null ? name : '%'" />
+        SELECT * FROM users
+        WHERE name LIKE #{filterName}
+    </select>
+    -->
+    <!-- 也支持 bind 输出作为下一个 bind 输入
+    <select id="calculate" resultType="double">
+        <bind name="total" value="price * quantity" />
+        <bind name="discounted" value="total * (1 - discount)" />
+        SELECT #{discounted} AS final_price
+    </select>
+    -->
+    <select id="selectStudentBindTag" resultMap="studentResultMap">
+        <bind name="pattern" value="'%' + name + '%'"/>
+        select * from student where name like #{pattern}
+    </select>
+
+    <!-- <sql> 和 <include> tag -->
+    <select id="selectStudentIncludeTag" resultMap="studentResultMap">
+        select
+        <include refid="studentColumns"/>
+        from student where student_id = #{student_id}
+    </select>
+</mapper>

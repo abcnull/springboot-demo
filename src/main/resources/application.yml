@@ -1,0 +1,56 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+# 数据源配置
+spring:
+  # mysql db
+  datasource:
+    url: jdbc:mysql://localhost:3306/springboot_demo_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+    # mysql 驱动
+    # com.mysql.cj.jdbc.Driver 支持 mysql 8，也兼容 5.x。默认开启 SSL 连接。对时区的处理更为严格
+    # com.mysql.jdbc.Driver 支持 5.x，已被弃用
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # redis lettuce 连接池
+  redis:
+    host: localhost  # Redis 服务器地址
+    port: 6379       # Redis 服务器端口，默认是 6379
+    password:        # Redis 密码（如果没有密码，可以省略）
+    database: 0      # 使用的数据库索引，默认是 0
+    timeout: 2000    # 连接超时时间（毫秒）
+    lettuce:
+      pool:
+        max-active: 8      # 连接池最大连接数（包括正在使用和空闲的连接），根据 CPU 核心数调整，通常为 CPU * 2 + 2，默认值 8
+        max-idle: 8        # 连接池最大空闲连接数（避免频繁创建连接），一般 CPU * 2，默认值 8
+        min-idle: 0        # 连接池最小空闲连接数（保持一定数量的空闲连接），0 或 1（低负载场景），默认值 0
+        max-wait: 5000ms     # 获取连接的最大等待时间（-1 表示无限制）（单位：毫秒，负值表示无限等待），推家 5000~60000（避免线程长时间阻塞），默认值 -1
+
+# 下面这些内容是为了让 MyBatis 映射
+mybatis:
+  # 指定 Mybatis 的 Mapper xml 文件在 resources 下的位置
+  # 默认是 resources 下的 com.example.springbootdemo.mapper 下，因为与 mapper 接口路径对应
+  # 由于一般包名较长，习惯直接放在 resources 下的 mapper 文件中
+  mapper-locations: classpath:mapper/*xml
+  # 指定 Mybatis 的实体所在的目录
+  type-aliases-package: org.example.springbootdemo.model
+
+# 分页插件
+pagehelper:
+  # 指定数据库方言
+  helper-dialect: mysql
+  # 启用分页合理化
+  reasonable: true
+  # 支持通过 Mapper 方法参数传递分页参数
+  support-methods-arguments: true
+  # 看情况加
+  # 允许通过自定义的 SQL 查询语句来计算总记录数，而不是依赖 PageHelper 自动生成的 COUNT 查询，主要起到优化性能的作用
+  params: count=countSql
+  # 看情况加
+  # true 表示：当 pageSize=0 或 RowBounds.limit=0 时，查询全部结果
+  page-size-zero: false
+
+# springboot 自带的 logback 的日志配置
+logging:
+  config: classpath:logback-spring.xml

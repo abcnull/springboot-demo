@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 应用名称 -->
+    <property name="APP_NAME" value="springboot-demo"/>
+
+    <!-- 定义日志文件的存储地址 -->
+    <!-- ${user.dir} 是项目路径 -->
+    <property name="LOG_HOME" value="${user.dir}/log"/>
+
+    <!-- 定义日志格式 -->
+    <!-- 形如 2025-09-11 22:39:11.276 [main] INFO  包.类.方法 - 日志信息 -->
+    <!--
+        如是要打印收集日志的 调用类、方法名、行号 等信息，性能代价非常高！
+        每次打印日志都要遍历调用栈，性能下降可达 10~100 倍！
+        在高并发场景下，可能导致 CPU 使用率飙升！
+    -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!-- 文件输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 表示保留最近 30 个时间周期，设置 %d{yyyy-MM-dd} 是一个时间周期即 1 天，会删除老的日志文件，有助于控制日志文件占用的磁盘空间大小，防止日志文件无限增长 -->
+            <maxHistory>30</maxHistory>
+            <!-- 单个日志文件超限时候，生成的额外日志文件名 -->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 用于指定单个日志文件的最大大小，大小达到50MB时，系统会创建一个新的日志文件来记录后续的日志信息 -->
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <!-- 使用日志的输出格式 -->
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- 异步日志，定义一个异步 Appender，包装上面的 FILE -->
+    <!--
+        如果不添加 AsyncAppender 默认是同步的
+        AsyncAppender 会启动一个独立的后台线程
+        当你调用 logger.info() 时，它只是把日志事件（LoggingEvent）放入一个队列，然后立即返回，不阻塞业务线程
+        后台线程从队列中取出日志，并交给真正的 Appender（如 File、Console）去写
+    -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>  <!-- 引用实际的 Appender -->
+        <!--
+            普通 Web 服务（QPS < 100）	256 ~ 512	足够应对短时高峰
+            高并发服务（QPS > 1000）	1024	避免频繁阻塞，但注意内存
+            极端高吞吐 / 日志密集型	2048	需监控 GC 和内存
+            ❌ 官方建议最大不推荐超过 2048	——	容易导致 Full GC，且日志延迟高
+        -->
+        <queueSize>256</queueSize>  <!-- 队列大小(数量), 队列满了即会阻塞生产者线程 -->
+        <!-- 丢弃阈值，控制当队列剩余空间小于某个值时，是否开始丢弃非关键日志（如 DEBUG、TRACE） -->
+        <!-- 一般用默认值即可，不用设置，默认值：queueSize / 5，即队列剩余空间小于 20% 时，开始丢弃低级别日志 -->
+        <discardingThreshold>10</discardingThreshold>
+        <!--
+            生产环境，❌ 禁用，避免性能问题，填写 false！
+            includeCallerData 表示是否包含调用者信息
+            即是否收集日志的 调用类、方法名、行号 等信息，如果你在 pattern 中用了 <pattern>... %class %method [%line] - %msg%n</pattern> 你就需要写 true，但是生产环境不允许标记 true 带来过大的性能损耗！
+        -->
+        <includeCallerData>false</includeCallerData>
+        <!-- 可选：设置最大刷新时间（毫秒），避免日志延迟太久 -->
+        <!-- 当你的应用 正常关闭，Logback 会尝试 把异步队列中还未处理的日志全部写完，然后再退出，maxFlushTime 就是最多等多久，如果超时还没写完，就强制退出 -->
+        <!-- 默认值是 0，表示“无限等待”，直到队列清空 -->
+        <!-- 如果没有 maxFlushTime，在容器环境（如 K8s），应用会一直等，可能导致 Kubernetes 杀死 Pod 超时、服务下线延迟等严重问题，因为 Pod 会因 terminationGracePeriod 超时被强制杀掉，日志丢失且影响发布效率 -->
+        <!--
+            普通 Web 服务	1000 ~ 3000 ms	1~3 秒足够写完剩余日志
+            高吞吐日志服务	5000 ms	可适当放宽，但不要超过 5 秒
+            实时性要求高	500 ms	宁可丢日志，也不能影响停机速度
+        -->
+        <maxFlushTime>1000</maxFlushTime>
+    </appender>
+
+    <!-- 第三方库日志级别降级 -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.apache" level="ERROR"/>
+
+    <!--
+        日志传播由下向上：
+        com.example.service.UserService对应的logger处理 =>
+        logger com.example.service =>
+        logger com.example =>
+        <root> logger
+
+        日志过滤由外向里：
+        com.example.service.UserService对应的logger处理 > append =>
+        logger com.example.service > append  =>
+        logger com.example > append =>
+        <root> logger > append
+    -->
+
+    <!-- 特定包的日志在这里配置 -->
+    <!-- name="com.example.myapp" 针对特定包设置不同级别 -->
+    <!-- additivity="false" 且其中含有 appender 时候防止日志重复输出 -->
+    <!--
+        additivity="false" 作用
+        假设您有一个名为com.example.service.UserService的类，其中有一行logger.debug("用户登录")代码
+        当没有设置additivity="false"时，且 <logger> 其中含有 appender-ref 这一条日志会按照以下路径传递：
+        - 首先被com.example.service.UserService对应的logger处理
+        - 然后传递给父级logger com.example.service
+        - 再传递给com.example
+        - 最终传递到 <root> logger，这里又被输出了
+        如果每个级别的 logger 都配置了 appender，这条日志会被输出多次，导致日志重复
+    -->
+    <logger name="com.example.myapp" level="DEBUG"/>
+
+    <!-- 根 Logger，root 是日志系统的顶级 logger，它的 level 属性决定了哪些日志事件会被处理 -->
+    <!-- 日志级别：TRACE < DEBUG < INFO < WARN < ERROR < FATAL -->
+    <!--
+        日志过滤流向：root 的 level 是全局日志的入口过滤条件，决定了哪些日志事件会被处理
+        - 由 root 的 level 过滤
+        - 由 appender 的过滤器进一步过滤
+    -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>

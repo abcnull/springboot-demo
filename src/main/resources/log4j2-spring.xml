@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <!-- 自定义变量 -->
+    <Properties>
+        <!-- APP name -->
+        <Property name="APP_NAME">springboot-demo</Property>
+        <!-- 日志输出格式 -->
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+        <!-- 日志存储路径 -->
+        <Property name="LOG_PATH">${user.dir}/log</Property>
+        <!-- 文件大小限制 -->
+        <Property name="MAX_FILE_SIZE">50MB</Property>
+        <!-- 保留历史日志天数 -->
+        <Property name="MAX_HISTORY">30</Property>
+    </Properties>
+
+    <!-- 定义 Appender（日志输出目的地） -->
+    <Appenders>
+        <!-- 1.控制台输出 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <!--
+                onMatch="ACCEPT" 和 onMismatch="DENY"
+
+                多个过滤器下：
+                <Filters>
+                    接受 ERROR 级别日志
+                    <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+                    接受 WARN 级别日志
+                    <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+                </Filters>
+            -->
+            <!--
+                常见组合示例：onMatch="ACCEPT" 和 onMismatch="DENY"
+
+                onMatch：当日志事件匹配过滤器的条件时，决定如何处理该日志
+                - ACCEPT：接受该日志，允许其继续传递到后续的过滤器
+                - DENY：拒绝该日志，直接丢弃，不再传递。
+                - NEUTRAL：不处理该日志，将其传递给下一个过滤器（如果存在）或父级 Logger。
+
+                onMismatch：当日志事件不匹配过滤器的条件时，决定如何处理该日志
+                - ACCEPT：接受该日志，允许其继续传递到后续的过滤器
+                - DENY：拒绝该日志，直接丢弃，不再传递。
+                - NEUTRAL：不处理该日志，将其传递给下一个过滤器（如果存在）或父级 Logger。
+            -->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <!-- 2.滚动文件输出 -->
+        <RollingFile name="File" fileName="${LOG_PATH}/${APP_NAME}.log"
+                     filePattern="${LOG_PATH}/app-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <!-- 按时间滚动 -->
+                <!-- interval：取决按时间滚动 filePattern 日期格式，如果 yyyy-MM-dd，则 1 表示每天滚动 1 次，如果 interval = 2 表示每 12h 滚动 1 次 -->
+                <!-- modulate：true，日志滚动时间会以0点为边界进行调整，使日志文件的生成时间更加规范化。比如有这样的效果：假设现在是早上3点，interval是4小时，那么第一次滚动会在4点，接着是8点、12点等，而不是从当前时间开始计算的7点 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- 按文件大小滚动 -->
+                <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
+            </Policies>
+            <!-- 保留历史文件数量 -->
+            <DefaultRolloverStrategy max="${MAX_HISTORY}"/>
+        </RollingFile>
+
+        <!-- 3.异步日志输出（高性能） -->
+        <Async name="AsyncFile">
+            <AppenderRef ref="File"/>
+        </Async>
+    </Appenders>
+
+    <!-- 定义 Logger，日志入水口 -->
+    <Loggers>
+        <!-- 第三方库日志级别降级 -->
+        <Logger name="org.springframework" level="WARN"/>
+        <Logger name="org.apache" level="ERROR"/>
+
+        <!-- additivity=false 为了避免向 Root 传递，导致文件中日志打 2 遍 -->
+        <AsyncLogger name="com.your.package" level="DEBUG" additivity="false">
+            <AppenderRef ref="AsyncFile"/>
+        </AsyncLogger>
+
+        <!-- 根日志配置 -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <!-- 异步日志（推荐用于业务代码） -->
+            <AppenderRef ref="AsyncFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

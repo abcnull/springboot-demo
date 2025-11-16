@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.springbootdemo.mapper.SchoolClassMapper">
+    <!-- => SchoolClass -->
+    <resultMap id="schoolClassResultMap" type="org.example.springbootdemo.model.SchoolClass">
+        <id column="school_class_id" property="schoolClassId"/>
+        <result column="class_num" property="classNum"/>
+        <result column="grade_num" property="gradeNum"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <!-- => 包含了 student list 的 SchoolClass -->
+    <!-- <collection> 标签 -->
+    <resultMap id="schoolClassStudentResultMap" type="org.example.springbootdemo.dto.SchoolClassStudentDTO">
+        <id column="school_class_id" property="schoolClassId"/>
+        <result column="grade_num" property="gradeNum"/>
+        <result column="class_num" property="classNum"/>
+        <collection property="studentList" ofType="Student">
+            <result column="name" property="name"/>
+            <result column="age" property="age"/>
+        </collection>
+    </resultMap>
+
+    <!-- => 包含了 student list 的 SchoolClass -->
+    <!-- <collection> 标签 -->
+    <resultMap id="studentSchoolClass2ResultMap" type="org.example.springbootdemo.dto.StudentSchoolClass2DTO">
+        <id column="student_id" property="studentId"/>
+        <result column="name" property="name"/>
+        <association property="schoolClass" javaType="SchoolClass">
+            <result column="class_num" property="classNum"/>
+        </association>
+    </resultMap>
+
+    <!-- 依据 in school_class_id 查询 school_class -->
+    <select id="selectSchoolClassByIds" resultMap="schoolClassResultMap">
+        select * from school_class_id where school_class_id in
+        <foreach item="itemId" collection="schoolClassIds" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </select>
+
+    <!-- 依据 schoolClassId 查询 班级学生 dto 数据 -->
+    <!-- 在映射 dto resultMap 中使用了 <collection> 标签 -->
+    <select id="selectSchoolClassById" resultMap="schoolClassStudentResultMap">
+        select c.school_class_id, c.grade_num, c.class_num, s.name, s.age
+        from school_class c
+                 inner join student s on c.school_class_id = s.school_class_id
+        where c.shcool_class_id = #{schoolClassId}
+    </select>
+
+    <!-- 依据 studentId 查询 学生以及班级的 dto 数据 -->
+    <!-- 在映射 dto resultMap 中使用了 <association> 标签 -->
+    <select id="selectStudentById" resultMap="studentSchoolClass2ResultMap">
+        select s.student_id, s.name, c.class_num
+        from student s
+                 inner join school_class s on c.shcool_class_id = s.school_class_id
+        where s.student_id = #{studentId}
+    </select>
+</mapper>
