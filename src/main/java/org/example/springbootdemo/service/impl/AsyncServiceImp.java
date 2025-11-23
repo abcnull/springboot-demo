@@ -1,30 +1,19 @@
-package org.example.springbootdemo.controller.async;
+package org.example.springbootdemo.service.impl;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.example.springbootdemo.service.IAsyncService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Springboot 使用 @Async 的异步能力 Controller
- *
- * 常用场景：
- * 1.用户注册（userThreadPool），比如注册时候，异步发送邮件，异步发送验证码
- * 2.邮件发送（emailThreadPool）
- * 3.短信通知（smsThreadPool）
- * 4.数据同步（syncThreadPool）
- * 5.报表生成（reportThreadPool）
+ * springboot 异步 Serivce
  */
-@RestController
-@RequestMapping("/async")
-public class AsyncController {
-    @Autowired
-    private IAsyncService asyncService;
-
+@Slf4j
+@Service
+public class AsyncServiceImp implements IAsyncService {
     /**
      * 默认线程池的简单的方法异步，此方法会被异步执行，生产中不建议使用这种！
      * <p>
@@ -34,10 +23,13 @@ public class AsyncController {
      * <p>
      * 注意：此方式展示默认的 springboot 的 SimpleAsyncTaskExecutor 线程池，你需要把 org.example.springbootdemo.config.async.AsyncConfig 中的代码注释掉，此代码表示要给 @Async 配置一个自定义的线程池
      */
-    @GetMapping("/basic")
-    public String basicAsync() {
-        asyncService.basicAsync();
-        return "success";
+    @Async
+    @SneakyThrows
+    @Override
+    public void basicAsync() {
+        System.out.println("basicAsync 发送文件中...");
+        Thread.sleep(2000); // 模拟耗时操作
+        System.out.println("basicAsync 发送文件结束");
     }
 
     /**
@@ -49,10 +41,13 @@ public class AsyncController {
      * <p>
      * 注意：此方式展示自定义的线程池，org.example.springbootdemo.config.async.AsyncConfig 中的代码起到作用，此代码表示要给 @Async 配置一个自定义的线程池
      */
-    @GetMapping("/custom")
-    public String customAsync() {
-        asyncService.customAsync();
-        return "success";
+    @Async
+    @SneakyThrows
+    @Override
+    public void customAsync() {
+        System.out.println("customAsync 发送文件中...");
+        Thread.sleep(2000); // 模拟耗时操作
+        System.out.println("customAsync 发送文件结束");
     }
 
     /**
@@ -64,34 +59,43 @@ public class AsyncController {
      * <p>
      * 注意：此方式展示自定义多种不同的线程池，org.example.springbootdemo.config.async.MutiAsyncConfig 中的代码起到作用，此代码表示要给 @Async(线程池名) 配置一个自定义的线程池
      */
-    @GetMapping("/custom-muti")
-    public String customMutiAsync() {
-        asyncService.customMutiAsync();
-        return "success";
+    @Async("firstTaskExecutor") // 指定使用线程池
+    @SneakyThrows
+    @Override
+    public void customMutiAsync() {
+        System.out.println("配置的第一个线程池发送文件中...");
+        Thread.sleep(2000); // 模拟耗时操作
+        System.out.println("配置的第一个线程池发送文件结束");
     }
 
     /**
      * 使用 @Async 异步的方法获取异步返回结果
+     *
+     * @return CompletableFuture<String>
      */
+    @Async
     @SneakyThrows
-    @GetMapping("/resp-get")
-    public String asyncRespGet() {
-        // 异步执行，结果赋予 future，但是异步执行不会阻碍这个主线程执行
-        CompletableFuture<String> future = asyncService.asyncRespGet();
+    @Override
+    public CompletableFuture<String> asyncRespGet() {
+        // 耗时操作
+        Thread.sleep(1000);
 
-        // 主线程执行，这里主线程执行，future 结果还没有拿到
-        System.out.println("主线程继续执行...");
-
-        // 这里 future.get() 是 CompletableFuture 的阻塞能力，这一行可以阻塞主线程直到拿到这个 future 的结果
-        return future.get(); // 获取结果（会阻塞直到完成）
+        return CompletableFuture.completedFuture("Result");
     }
 
     /**
      * 在使用 springboot 的 @Async 时候有哪些常见坑点
      */
-    @GetMapping("/pitfalls")
-    public String asyncPitFalls() {
-        asyncService.asyncPitFalls();
-        return "success";
+    @Override
+    public void asyncPitFalls() {
+        // 坑点 1: 同一个类中使用该异步方法，并不会触发异步，必须通过 Spring 容器获取 Bean 调用
+        this.basicAsync();
+        log.info("asyncPitFalls, 同一个类中使用该异步方法，并不会触发异步，必须通过 Spring 容器获取 Bean 调用");
+
+        // 坑点 2: static 方法不能用 @Async：Spring 的代理机制无法处理 static 方法
+        log.info("asyncPitFalls, static 方法不能用 @Async：Spring 的代理机制无法处理 static 方法");
+
+        // 坑点 3: 默认线程池太危险：不要在生产环境用默认线程池，会 OOM 的！
+        log.info("asyncPitFalls, 默认线程池太危险：不要在生产环境用默认线程池，会 OOM 的！");
     }
 }
