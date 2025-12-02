@@ -26,6 +26,32 @@ spring:
         max-idle: 8        # 连接池最大空闲连接数（避免频繁创建连接），一般 CPU * 2，默认值 8
         min-idle: 0        # 连接池最小空闲连接数（保持一定数量的空闲连接），0 或 1（低负载场景），默认值 0
         max-wait: 5000ms     # 获取连接的最大等待时间（-1 表示无限制）（单位：毫秒，负值表示无限等待），推家 5000~60000（避免线程长时间阻塞），默认值 -1
+  # kafka 接入
+  kafka:
+    bootstrap-servers: localhost:9092 # kafka 连接地址
+    # 生产者配置
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer # 对于复杂对象，使用JsonSerializer和JsonDeserializer，避免使用默认的StringSerializer处理JSON数据
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 批量发送配置
+      batch-size: 16384
+      linger: 5ms
+    # 消费者配置
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    # 监听器配置
+    listener:
+      concurrency: 3  # 消费者并发数
+      ack-mode: manual_immediate
+#    # 如果要手动提交偏移量来确认消息消费掉，需要改成下面方式！否则走默认的自动 5s 后提交偏移量来自动确认消息已经消费，让下次该消息不再发送
+#    consumer:
+#      enable-auto-commit: false
+#      group-id: my-group
+#    listener:
+#      ack-mode: MANUAL  # 关键配置！
 
 # 下面这些内容是为了让 MyBatis 映射
 mybatis:
