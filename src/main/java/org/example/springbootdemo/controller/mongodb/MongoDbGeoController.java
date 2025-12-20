@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * mongodb controller
  * <p>
- * 用于处理 mongodb geo 相关的请求
+ * 用于处理 mongodb geo 地理位置相关的请求
  */
 @RestController
 @RequestMapping("/mongodb-geo")

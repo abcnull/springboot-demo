@@ -64,6 +64,12 @@ spring:
       password: "strongPassword123!"
       authentication-database: admin
 
+  # elasticsearch
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: your_secure_password
+
 # 下面这些内容是为了让 MyBatis 映射
 mybatis:
   # 指定 Mybatis 的 Mapper xml 文件在 resources 下的位置
