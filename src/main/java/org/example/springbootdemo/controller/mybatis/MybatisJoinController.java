@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * mybatis 联表查询 todo 待测试
+ * mybatis 联表查询
  */
 @RestController
 @RequestMapping("/mybatis-join")

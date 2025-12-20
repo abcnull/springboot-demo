@@ -53,6 +53,17 @@ spring:
 #    listener:
 #      ack-mode: MANUAL  # 关键配置！
 
+  # mongodb
+  data:
+    mongodb:
+      uri: mongodb://app-user:${MONGODB_PASSWORD}@mongo-prod.example.com:27017/mydb?ssl=true&authSource=admin&retryWrites=true&retryReads=true&applicationName=production-app-springboot-demo
+      host: mongo-prod.example.com
+      port: 27017
+      database: mydb
+      username: app-user
+      password: "strongPassword123!"
+      authentication-database: admin
+
 # 下面这些内容是为了让 MyBatis 映射
 mybatis:
   # 指定 Mybatis 的 Mapper xml 文件在 resources 下的位置

@@ -53,8 +53,10 @@ public class CorsFilter implements Filter {
 
         // 不论是 option 还是 get/post 请求，如果该请求 origin 不在允许的 origin 列表中，返回 403
         if (!isAllowed) {
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Origin not allowed: " + origin);
-            return;
+//            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Origin not allowed: " + origin);
+//            return;
+
+            // 为了保证项目正常运行 ⬆️ 被注释掉，实际上方为正常代码
         }
 
         // 后续是 origin 是在允许的 origin 列表中

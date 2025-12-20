@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 项目运行时，初始化数据的举例 todo：待测试
+ * 项目运行时，初始化数据的举例
  * 一般建议选择 ApplicationRunner 或者监听 ApplicationReadyEvent 的方式
  */
 @RestController

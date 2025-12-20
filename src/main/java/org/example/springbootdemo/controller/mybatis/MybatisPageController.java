@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * mybatis 分页查询操作 todo done
+ * mybatis 分页查询操作
  */
 @RestController
 @RequestMapping("/mybatis-page")

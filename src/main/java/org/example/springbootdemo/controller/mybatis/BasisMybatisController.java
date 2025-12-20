@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 /**
- * 基础的 mybatis 的增删改查操作 todo done
+ * 基础的 mybatis 的增删改查操作
  */
 @RestController
 @RequestMapping("/basis-mybatis")

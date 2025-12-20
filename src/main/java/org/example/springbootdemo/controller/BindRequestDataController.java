@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * controller 层绑定各种类型的请求数据举例 todo done
+ * controller 层绑定各种类型的请求数据举例
  * 这些入参注解其实是 springmvc 的能力
  */
 @RestController
