@@ -19,34 +19,37 @@ import java.util.stream.Collectors;
 
 /**
  * es service
- *
+ * <p>
  * Spring Boot 2.4+ 与 Elasticsearch 7.x 兼容，
  * Spring Boot 3.x 与 Elasticsearch 8.x 兼容
- *
+ * <p>
  * 对于重要数据，应当有从数据库到 ES 的同步机制，可使用 Logstash、Canal 或应用层同步
  * 使用过滤器上下文 (filter context) 而非查询上下文 (query context) 进行过滤
- *
+ * <p>
  * es 经典常用业务场景：
  * - 全文搜索（电商/内容平台）
  * - 日志分析与监控（ELK栈）即 es + Logstash + Kibana
- *  - 直接通过 springboot 中 Logback 对应 xml 日志配置，配置上发送到 ES
- *  - es 存储
- *  - kibana 可视化查询
+ * - 直接通过 springboot 中 Logback 对应 xml 日志配置，配置上发送到 ES
+ * - es 存储
+ * - kibana 可视化查询
  * - 实时数据分析和可视化
  * - 个性化推荐系统
  * - 自动补全和搜索建议
  */
 @Service
 public class EsServiceImpl implements IEsService {
+    // 可以使用自定义的 repository 这个 dao 层来进行查询
     @Autowired
     private ProductRepository productRepository;
 
+    // 可以使用 ElasticsearchRestTemplate 这个模版来做一些复杂的查询
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     /* ========== repository ========== */
 
     // 存储商品，已有 save 方法
+    // 其实写入时，可以直接操作 es 写入，开发中也有用传入 Kafka 后，消费者拿到消息再写入 es 的，如果通过消息的方式就可以解放生产者服务和 es 存储的耦合避免 es 存储失败而导致写入服务后续阻碍
     public Product save(Product product) {
         return productRepository.save(product);
     }
