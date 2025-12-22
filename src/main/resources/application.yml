@@ -46,12 +46,12 @@ spring:
     listener:
       concurrency: 3  # 消费者并发数
       ack-mode: manual_immediate
-#    # 如果要手动提交偏移量来确认消息消费掉，需要改成下面方式！否则走默认的自动 5s 后提交偏移量来自动确认消息已经消费，让下次该消息不再发送
-#    consumer:
-#      enable-auto-commit: false
-#      group-id: my-group
-#    listener:
-#      ack-mode: MANUAL  # 关键配置！
+  #    # 如果要手动提交偏移量来确认消息消费掉，需要改成下面方式！否则走默认的自动 5s 后提交偏移量来自动确认消息已经消费，让下次该消息不再发送
+  #    consumer:
+  #      enable-auto-commit: false
+  #      group-id: my-group
+  #    listener:
+  #      ack-mode: MANUAL  # 关键配置！
 
   # mongodb
   data:
@@ -76,6 +76,15 @@ spring:
     username: hive
     password: hive123
     driver-class-name: org.apache.hive.jdbc.HiveDriver
+
+  # Hbase
+  hbase:
+    zookeeper:
+      quorum: zk1.example.com,zk2.example.com,zk3.example.com
+      property:
+        clientPort: 2181
+    znode:
+      parent: /hbase
 
 # 下面这些内容是为了让 MyBatis 映射
 mybatis:

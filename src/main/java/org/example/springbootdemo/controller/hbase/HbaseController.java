@@ -1,10 +1,21 @@
 package org.example.springbootdemo.controller.hbase;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.example.springbootdemo.service.IHbaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * hbase controller
+ * <p>
+ * MySQL 一行数据的所有列存储在一起，HBase 同一列族的所有列值存储在一起，不同列族分开存储。HBase 是列式存储数据库，是面向列族 (Column Family) 的列式存储，不是简单的按列存储
+ * HBase 特别适合：高并发读写，存储稀疏数据（很多列可能为空），按列查询效率高，水平扩展能力强
+ * RowKey 是 HBase 中最重要的概念之一，它不是索引，而是数据组织的核心，RowKey 是表中每条记录的唯一标识符，类似于关系数据库的主键
+ * RowKey 是设计表时就必须确定
  * <p>
  * hbase 和 hive 类似都是基于 HDFS 存储的，都是属于 hadoop 生态中的，但是 hive 是离线表，不可实时查询，而 hbase 可以实时去查询
  * 二者都可以用来存储诸如用户行为数据，点击事件等
@@ -29,6 +40,59 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/hbase")
+@Slf4j
 public class HbaseController {
+    @Autowired
+    private IHbaseService hbaseService;
 
+    private static final String TABLE_NAME = "user_table";
+    private static final String INFO_FAMILY = "info";
+
+    // hbase 存数据
+    @PostMapping("/save")
+    public String saveUser(@RequestParam String userId, @RequestParam String name,
+                           @RequestParam String email, @RequestParam String phone) {
+        Map<String, String> columns = new HashMap<>();
+        columns.put("name", name);
+        columns.put("email", email);
+        columns.put("phone", phone);
+
+        try {
+            hbaseService.putData(TABLE_NAME, userId, INFO_FAMILY, columns);
+            return "User saved successfully";
+        } catch (Exception e) {
+            return "Error saving user: " + e.getMessage();
+        }
+    }
+
+    // hbase 根据 rowKey 取数据
+    @GetMapping("/{userId}")
+    public Map<String, String> getUser(@PathVariable String userId) {
+        try {
+            return hbaseService.getData(TABLE_NAME, userId, INFO_FAMILY);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // scan 数据
+    @GetMapping("/scan")
+    public List<Map<String, String>> scanTable() {
+        try {
+            return hbaseService.scanTable(TABLE_NAME, INFO_FAMILY);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // delete 通过 rowKey
+    @GetMapping("/delete/{userId}")
+    public String deleteUser(@PathVariable String userId) {
+        try {
+            hbaseService.deleteData(TABLE_NAME, userId);
+            return "del success";
+        } catch (Exception e) {
+            return "del failed";
+        }
+    }
 }
