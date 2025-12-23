@@ -86,6 +86,12 @@ spring:
     znode:
       parent: /hbase
 
+  # clickhouse
+  clickhouse:
+    clickhouse:
+      # 推荐：直接在URL中包含认证信息
+      url: jdbc:clickhouse://your-clickhouse-server:8123/your_database?user=default&password=your_password&socket_timeout=60000&connection_timeout=30000
+
 # 下面这些内容是为了让 MyBatis 映射
 mybatis:
   # 指定 Mybatis 的 Mapper xml 文件在 resources 下的位置

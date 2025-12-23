@@ -177,6 +177,13 @@
             <artifactId>hadoop-hdfs</artifactId>
             <version>3.3.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.clickhouse</groupId>
+            <artifactId>clickhouse-jdbc</artifactId>
+            <version>0.4.6</version>
+            <classifier>all</classifier> <!-- 包含所有依赖，避免缺少类问题 -->
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
