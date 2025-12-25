@@ -178,11 +178,18 @@
             <version>3.3.1</version>
         </dependency>
 
+        <!-- ClickHouse JDBC 驱动 -->
         <dependency>
             <groupId>com.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>
             <version>0.4.6</version>
             <classifier>all</classifier> <!-- 包含所有依赖，避免缺少类问题 -->
+        </dependency>
+
+        <!-- spring aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
     </dependencies>
 
