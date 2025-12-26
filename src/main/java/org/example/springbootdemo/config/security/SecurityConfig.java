@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * security config
@@ -78,12 +79,13 @@ public class SecurityConfig {
     @Value("${spring.security.oauth2.client.registration.keycloak.scope}")
     private String keycloakScope;
 
-    @Bean
+    // 怕受到影响导致项目无法启动，这里正常的 @Bean 需要给注释掉，但是此 sso 需要开放这个 bean
+//    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth // 设置哪些请求要经过认证
-                        .requestMatchers("/", "/public/**").permitAll()  // 公共资源
-                        .requestMatchers("/admin/**").hasRole("ADMIN")   // 管理员资源
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // 用户资源
+                        .requestMatchers(new AntPathRequestMatcher("/"), new AntPathRequestMatcher("/public/**")).permitAll()  // 公共资源
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")   // 管理员资源
+                        .requestMatchers(new AntPathRequestMatcher("/user/**")).hasAnyRole("USER", "ADMIN") // 用户资源
                         .anyRequest().authenticated()  // 其他请求都需要认证
                 )
                 /** 关键：设置如果请求过来时没有登录态，需要重定向的地方，然后该过滤器把请求打回，让浏览器重定向到 /oauth2/authorization/keycloak，它是认证中心 http://auth.example.com/auth/realms/my-realm 的触发 **/
