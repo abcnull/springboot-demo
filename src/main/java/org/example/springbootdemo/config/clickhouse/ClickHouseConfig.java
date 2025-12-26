@@ -1,8 +1,6 @@
 package org.example.springbootdemo.config.clickhouse;
 
 import com.clickhouse.jdbc.ClickHouseDataSource;
-import lombok.SneakyThrows;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
