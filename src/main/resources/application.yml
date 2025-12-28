@@ -4,6 +4,8 @@ server:
 
 # 数据源配置
 spring:
+  application:
+    name: springboot-demo
   # mysql db
   datasource:
     url: jdbc:mysql://localhost:3306/springboot_demo_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
@@ -136,6 +138,12 @@ pagehelper:
   # 看情况加
   # true 表示：当 pageSize=0 或 RowBounds.limit=0 时，查询全部结果
   page-size-zero: false
+
+# 服务注册中心（要连接到注册中心，为了调用微服务，和向注册中心注册自身服务）
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
 # springboot 自带的 logback 的日志配置
 logging:
