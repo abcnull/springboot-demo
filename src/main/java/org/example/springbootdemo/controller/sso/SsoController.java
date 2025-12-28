@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * sso controller
+ * 单点登录，多个平台/系统的统一登录，跨平台有效
  * 一般公司业务会有自己的 sso 认证中心，一般只需要在配置文件中配置上公司认证中心连接等内容即可，不需要使用购买的公有云
  * <p>
  * OAuth2.0/OpenID Connect：当前最主流方案，适合现代微服务架构，其被实现的具体产品有：

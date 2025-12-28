@@ -1,5 +1,7 @@
 package org.example.springbootdemo.config.interceptor;
 
+import org.example.springbootdemo.service.IJwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private IJwtService jwtService;
+
     // 调用目标方法之前执行的方法
     // 如果返回 ture 表示拦截器验证成功，执行目标方法
     // 如果返回 false 表示拦截器验证失败，不再继续执行后续业务
@@ -24,6 +30,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         // 获取 Token
+        // 一般前端塞入请求头 Authorization 中，格式一般是 Bearer xxxxx
         String token = request.getHeader("Authorization");
 
         // 如果 Token 无效返回 false，不再执行后续业务接口方法
@@ -32,6 +39,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 //            return false;
 
             // 为了保障项目正常运行，把 ⬆️ 注释掉了
+
             return true;
         }
 
@@ -53,6 +61,10 @@ public class AuthInterceptor implements HandlerInterceptor {
     // 校验 token 是否有效
     private boolean isValidToken(String token) {
         // 实际项目中调用 JWT 工具类验证 Token
+
+        // ⬇️ 为了保证此项目正常运转，把下面这块注释掉了。实际中 jwt 验证通过下面代码来验证 token 是否合法
+//        return jwtService.validateToken(token);
+
         return true; // 简化示例
     }
 }
