@@ -24,7 +24,7 @@ public class AopController {
 
 
     /**
-     * @LogOperation 注解在方法这里进行了切面，起到打印日志
+     * 注解：@LogOperation 在方法这里进行了切面，起到打印日志
      * 注意 OperationLogAspect 这个关键类，写了切面具体的操作逻辑
      */
     @RequestMapping("/log")

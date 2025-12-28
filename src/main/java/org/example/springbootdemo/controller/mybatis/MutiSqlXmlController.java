@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 各样的 sql 对应的 mapper xml 的写法举例 todo 待测试
+ * 各样的 sql 对应的 mapper xml 的写法举例
  *
  * 增删改查：select，insert，update，delete
  * 常用：if，where，set，foreach，parameterType，resultMap，resultType，sql，include

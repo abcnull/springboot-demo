@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  * * 3.6 依据 Security2Config 的配置，发给浏览器让其重定向到 /user
  * * 3.7 通过 SecurityContextPersistenceFilter 将 SecurityContext 存储到 Session，同时，Spring Security 会设置一个 Cookie（默认名称：SESSION）到 HTTP 响应头：（Set-Cookie: SESSION=abc123xyz; Path=/; HttpOnly; Secure）
  * 4.【访问业务-返回业务结果】：浏览器其实这里拿到了 cookie（上一步响应头中的），以及重定向的 /user 地址（你配置的 /user），业务服务端接收请求
- * * 4.1 这个业务请求过来，其实已经带上了鉴权信息了，Security2Config 本质是一个拦截器的过滤链，其中的关键拦截器会处理权限的校验，校验不过返回 401 Unauthorized
+ * * 4.1 这个业务请求过来，其实已经带上了鉴权信息了，Security2Config 本质是一个过滤器的过滤链，其中的关键过滤器会处理权限的校验，校验不过返回 401 Unauthorized
  * <p>
  * <p>
  * 对应 application.yml 中配置如下，由于 yml 中已经配置来 sso 相关，所以没有配置上下面这块内容：

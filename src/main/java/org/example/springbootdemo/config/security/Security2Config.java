@@ -9,7 +9,7 @@
 ///**
 // * Security2Config 配置有第三方授权完成后让浏览器重定向的 /user 业务接口，以及配置哪些请求需要经过权限检测
 // * <p>
-// * 注解 @EnableWebSecurity 本质是一个拦截器的过滤链条
+// * 注解 @EnableWebSecurity 本质是一个过滤器的过滤链条
 // */
 //@Configuration
 //@EnableWebSecurity

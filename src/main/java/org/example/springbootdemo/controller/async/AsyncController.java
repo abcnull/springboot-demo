@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Springboot 使用 @Async 的异步能力 Controller
- *
+ * <p>
  * 常用场景：
  * 1.用户注册（userThreadPool），比如注册时候，异步发送邮件，异步发送验证码
  * 2.邮件发送（emailThreadPool）
@@ -28,9 +28,10 @@ public class AsyncController {
     /**
      * 默认线程池的简单的方法异步，此方法会被异步执行，生产中不建议使用这种！
      * <p>
-     * 首先 @EnableAsync：可在启动类上加，表示开启异步
+     * 首先 @EnableAsync：可在启动类或自定义线程池的配置类上上加，表示开启异步
      * 然后 @Async：在方法上加，标记为异步执行
-     * 它使用了默认的线程池 SimpleAsyncTaskExecutor，但是过于野蛮，对于低异步量的简单场景可以这么用，复杂一点高并发的场景这么用很容易 OOM，一般需要自定义线程池
+     * <p>
+     * 直接使用 Async，它其实是使用了默认的线程池 SimpleAsyncTaskExecutor，但是过于野蛮，对于低异步量的简单场景可以这么用，复杂一点高并发的场景这么用很容易 OOM，一般需要自定义线程池
      * <p>
      * 注意：此方式展示默认的 springboot 的 SimpleAsyncTaskExecutor 线程池，你需要把 org.example.springbootdemo.config.async.AsyncConfig 中的代码注释掉，此代码表示要给 @Async 配置一个自定义的线程池
      */

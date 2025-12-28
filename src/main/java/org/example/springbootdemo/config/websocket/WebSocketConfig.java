@@ -41,13 +41,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     // 配置发送消息的前缀
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // 2. 配置服务端可以推送消息的前缀
+        // 配置服务端可以推送消息的前缀
         registry.enableSimpleBroker("/topic", "/queue");  // 广播和点对点前缀
 
-        // 3. 配置客户端发送消息的前缀
+        // 配置客户端发送消息的前缀
         registry.setApplicationDestinationPrefixes("/app");
 
-        // 4. 配置点对点消息前缀
+        // 配置点对点消息前缀
         registry.setUserDestinationPrefix("/user");
     }
 }

@@ -1,4 +1,4 @@
-package org.example.springbootdemo.controller;
+package org.example.springbootdemo.controller.reqdata;
 
 import org.example.springbootdemo.dto.UserDTO;
 import org.example.springbootdemo.dto.ValidGroup1;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 /**
- * 各种常用的入参校验注解使用 todo 待测试
+ * 各种常用的入参校验注解使用
  */
 @RestController
 @RequestMapping("/req-data-validate")

@@ -1,4 +1,4 @@
-package org.example.springbootdemo.controller;
+package org.example.springbootdemo.controller.reqdata;
 
 import com.alibaba.fastjson.JSON;
 import org.example.springbootdemo.model.Student;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * controller 层绑定各种类型的请求数据举例
- * 这些入参注解其实是 springmvc 的能力
  */
 @RestController
 @RequestMapping("/bind-req-data")

@@ -19,7 +19,6 @@ public class BasisMybatisController {
     // 依据 studentId 查询学生信息
     @GetMapping("/search/{studentId}")
     public Optional<Student> searchStudentById(@PathVariable String studentId) {
-        // todo 返回值待修改
         return basisMybatisService.searchStudentById(Long.valueOf(studentId));
     }
 

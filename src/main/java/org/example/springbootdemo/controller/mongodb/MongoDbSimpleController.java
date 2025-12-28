@@ -23,7 +23,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/mongodb-ordinary")
-public class MongoDbOrdinaryController {
+public class MongoDbSimpleController {
     @Autowired
     private IMongoDbService mongoDbService;
 

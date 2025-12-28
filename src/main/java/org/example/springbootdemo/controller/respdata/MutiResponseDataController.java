@@ -1,4 +1,4 @@
-package org.example.springbootdemo.controller;
+package org.example.springbootdemo.controller.respdata;
 
 import org.example.springbootdemo.common.ApiResponse;
 import org.example.springbootdemo.mapper.StudentMapper;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 多种不同方式和类型的 controller 层返回数据 todo 待测试
+ * 多种不同方式和类型的 controller 层返回数据
  */
 @RestController
 @RequestMapping("/muti-response-data")

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * redis 连接池
+ * redis 连接池 controller
  */
 @RestController
 @RequestMapping("/redis-lettuce")
