@@ -22,7 +22,7 @@ import java.util.Optional;
  * - 实时分析和报告：支持复杂的聚合查询，水平扩展容易
  */
 @RestController
-@RequestMapping("/mongodb-ordinary")
+@RequestMapping("/mongodb-simple")
 public class MongoDbSimpleController {
     @Autowired
     private IMongoDbService mongoDbService;
