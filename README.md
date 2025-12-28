@@ -2,7 +2,7 @@
 这里只做框架如何使用的介绍，以及演示 springboot demo，以及 springboot 和其他各种中间件的结合的 demo，
 尽量不做其他内容的介绍，比如 sql 语句怎么写，java 语法是如何的等等
 
-下方演示的 springboot demo 从 controller 层起步，往 service 层看代码逻辑，能更清晰看到不同的 demo 的展示
+下方演示的 jdk 1.8 + springboot 2.x demo 从 controller 层起步，往 service 层看代码逻辑，能更清晰看到不同的 demo 的展示
 
 # 2.项目结构
 ``` txt
