@@ -2,6 +2,42 @@
 这里只做框架如何使用的介绍，以及演示 springboot demo，以及 springboot 和其他各种中间件的结合的 demo，
 尽量不做其他内容的介绍，比如 sql 语句怎么写，java 语法是如何的等等
 
+你需要的前置知识：
+- java 语法
+- maven 配置
+- springboot 的了解
+- mysql 了解
+- redis 了解
+
+项目结合了如下组件提供了简单 demo：
+- 基础知识
+  - ioc/aop
+  - init
+  - 参数/结果返回
+- 过滤器
+- 拦截器
+- mybatis
+- 数据库
+  - mysql
+  - redis
+  - es
+  - mongodb
+  - hive
+  - hbase
+  - clickhouse
+- mq
+  - kafka
+- 异步
+- 鉴权
+  - jwt
+  - auth2.0
+  - sso
+- websocket
+- log
+  - logback
+  - log4j2
+- spring cloud
+
 下方演示的 jdk 1.8 + springboot 2.x demo 从 controller 层起步，往 service 层看代码逻辑，能更清晰看到不同的 demo 的展示
 
 # 2.项目结构
@@ -44,6 +80,39 @@
 ```
 
 # 3.Springboot 基本使用 demo
+Spring Boot 是 Spring 框架的"增强工具"，旨在简化 Spring 应用的开发和部署。它不是新框架，而是整合了 Spring 和常用库的"开箱即用"解决方案。
+
+一句话总结：
+Spring Boot 让你不用写配置文件，只需添加依赖，就能快速构建一个可独立运行的 Web 应用
+
+最核心特性：自动配置
+- 你只需引入依赖（如 spring-boot-starter-web），Spring Boot 会自动配置好 Tomcat、Spring MVC 等
+- 无需手动写 XML 配置，减少 80% 的配置工作
+
+简化依赖管理：Starter 依赖
+- 例如 spring-boot-starter-web 包含了 Web 开发所需的所有依赖（Spring MVC、Tomcat 等）
+- 自动解决依赖版本冲突，避免"版本地狱"
+
+内嵌服务器：Tomcat/Jetty
+- 直接打包成 JAR 文件，通过 java -jar app.jar 运行
+- 无需安装和配置 Tomcat 等外部服务器
+
+约定优于配置：
+- 按照最佳实践提供默认配置
+- 你只需关注业务逻辑，无需纠结配置细节
+
+无 XML 配置：
+- 使用注解（如 @SpringBootApplication）代替 XML
+- 代码更简洁，更易读
+
+快速创建一个 web 应用：
+``` txt
+- 在 Maven 中添加 spring-boot-starter-web 依赖
+- 创建一个带有 @SpringBootApplication 的主类
+- 创建一个 @RestController 控制器
+- 通过 java -jar 运行，无需 Tomcat
+```
+
 ## 3.1 初始化执行
 `InitDataController` 展示可以初始化执行一批逻辑
 - `onBeanInit()` 最先执行，通过 `@PostConstruct` 标记对应的方法能在某个 bean 的初始化后再执行
