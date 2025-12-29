@@ -2,14 +2,16 @@
 这里只做框架如何使用的介绍，以及演示 springboot demo，以及 springboot 和其他各种中间件的结合的 demo，
 尽量不做其他内容的介绍，比如 sql 语句怎么写，java 语法是如何的等等
 
-你需要的前置知识：
+下方演示的 jdk 1.8 + springboot 2.x demo 从 controller 层起步，往 service 层看代码逻辑，能更清晰看到不同的 demo 的展示
+
+## 1.1 你可能需要的前置知识
 - java 语法
 - maven 配置
 - springboot 的了解
 - mysql 了解
 - redis 了解
 
-项目结合了如下组件提供了简单 demo：
+## 1.2 项目结合了如下组件提供了简单 demo
 - 基础知识
   - ioc/aop
   - init
@@ -38,7 +40,15 @@
   - log4j2
 - spring cloud
 
-下方演示的 jdk 1.8 + springboot 2.x demo 从 controller 层起步，往 service 层看代码逻辑，能更清晰看到不同的 demo 的展示
+## 1.3 项目快速启动
+拉取此项目后，使用比如 idea 运行该项目，项目 run 起来后
+
+浏览器输入：(确保端口没有被其他程序占用)
+```
+http://localhost:8080/bind-req-data/search?name=xiaoming
+```
+
+观察页面表现。浏览器成功访问到了项目中的接口了！
 
 # 2.项目结构
 ``` txt

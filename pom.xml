@@ -49,12 +49,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.taobao.arthas</groupId>
-            <artifactId>arthas-spring-boot-starter</artifactId>
-            <version>3.6.7</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
@@ -193,16 +187,24 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!--
+        当Spring Boot项目中引入了Spring Security依赖，但没有提供自定义安全配置时，Spring Security会自动应用 默认安全配置 ：
+
+        - 所有请求都需要认证 ：默认情况下，Spring Security会保护所有HTTP端点
+        - 未认证请求重定向 ：当访问未认证的请求时，会自动重定向到 /login 页面
+        - 内置登录页面 ：Spring Security提供了一个简单的内置登录页面，这就是你看到的不是项目中自定义的login页面
+        -->
+        <!-- ⬇️ 当你的项目确保有 security 接入时，可以开启这里的依赖 -->
         <!-- Spring Security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <!-- Spring Security OAuth2 Client -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; Spring Security OAuth2 Client &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-oauth2-client</artifactId>-->
+<!--        </dependency>-->
         <!-- Thymeleaf (如果需要服务端渲染) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

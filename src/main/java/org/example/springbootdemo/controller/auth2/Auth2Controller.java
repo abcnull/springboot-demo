@@ -1,7 +1,7 @@
 package org.example.springbootdemo.controller.auth2;
 
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+//import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+//import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,10 +85,16 @@ public class Auth2Controller {
      */
     // 获取用户信息（@RegisteredOAuth2AuthorizedClient("wx") OAuth2AuthorizedClient authorizedClient 已经包含用户信息数据）
     @GetMapping("/user")
-    public String userInfo(@RegisteredOAuth2AuthorizedClient("wx") OAuth2AuthorizedClient authorizedClient) {
+    public String userInfo(
+            // ⬇️ 因为第三方授权没有，这里注释掉，否则会报错，当你存在第三方授权，你这里要开放并做好配置
+//            @RegisteredOAuth2AuthorizedClient("wx") OAuth2AuthorizedClient authorizedClient
+    ) {
         // 无需手动调用微信 API！Spring Security 已自动获取用户信息
         // 此处可直接用 authorizedClient 获取 access token 和用户数据
 
-        return "登录成功！用户标识: " + authorizedClient.getPrincipalName();
+        // ⬇️ 因为第三方授权没有，这里注释掉，否则会报错，当你存在第三方授权，你这里要开放并做好配置
+//        return "登录成功！用户标识: " + authorizedClient.getPrincipalName();
+
+        return "登录成功";
     }
 }

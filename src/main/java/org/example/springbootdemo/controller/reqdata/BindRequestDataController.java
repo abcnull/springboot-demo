@@ -34,7 +34,7 @@ public class BindRequestDataController {
     @GetMapping("/search")
     public String reqParams2(@RequestParam String name) {
         System.out.println("queryParams 参数: " + name);
-        return "success";
+        return name;
     }
 
     // json 请求体参数

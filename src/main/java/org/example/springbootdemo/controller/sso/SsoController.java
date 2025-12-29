@@ -1,7 +1,7 @@
 package org.example.springbootdemo.controller.sso;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+//import org.springframework.security.core.annotationg.AuthenticationPrincipal;
+//import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,9 +92,14 @@ public class SsoController {
 
     // @AuthenticationPrincipal OAuth2User principal 它从安全上下文中获取数据，而安全上下文存储在会话中
     @GetMapping("/user/profile")
-    public String userProfile(Model model, @AuthenticationPrincipal OAuth2User principal) {
-        model.addAttribute("userName", principal.getName());
-        model.addAttribute("userAttributes", principal.getAttributes());
+    public String userProfile(Model model
+                              // ⬇️ 因为 sso 服务端没有启动，这里注释掉，否则会报错，当你存在 sso 服务端，你这里要开放并做好配置
+//                              @AuthenticationPrincipal OAuth2User principal
+    ) {
+        // ⬇️ 因为 sso 服务端没有启动，这里注释掉，否则会报错，当你存在 sso 服务端，你这里要开放并做好配置
+//        model.addAttribute("userName", principal.getName());
+//        model.addAttribute("userAttributes", principal.getAttributes());
+
         return "user/profile"; // 对应 src/main/resources/templates/user/profile.html
     }
 
