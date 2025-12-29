@@ -232,10 +232,17 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- spring cloud -->
+        <!-- ⬇️ 因为 eureka 服务端没有启动，这里注释掉，否则会报错，当你存在 eureka 服务端，你这里要开放并做好配置 -->
+<!--        &lt;!&ndash; spring cloud &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-auth</artifactId>
+            <version>3.3.1</version> <!-- 与hadoop-common版本一致 -->
         </dependency>
     </dependencies>
 

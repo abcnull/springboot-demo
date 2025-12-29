@@ -19,8 +19,9 @@ import java.util.Map;
  */
 @Service
 public class HbaseServiceImpl implements IHbaseService {
-    @Autowired
-    private Connection hbaseConn;
+    // ⬇️ 因为没有 hbase 服务端，如果 hbase 服务端 ok 可以开放这里
+//    @Autowired
+//    private Connection hbaseConn;
 
     /**
      * 插入或更新数据
@@ -32,20 +33,21 @@ public class HbaseServiceImpl implements IHbaseService {
      */
     @SneakyThrows
     public void putData(String tableName, String rowKey, String columnFamily, Map<String, String> columns) {
-        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
-        try {
-            Put put = new Put(Bytes.toBytes(rowKey));
-            for (Map.Entry<String, String> entry : columns.entrySet()) {
-                put.addColumn(
-                        Bytes.toBytes(columnFamily),
-                        Bytes.toBytes(entry.getKey()),
-                        Bytes.toBytes(entry.getValue())
-                );
-            }
-            table.put(put);
-        } finally {
-            table.close();
-        }
+        // ⬇️ 因为没有 hbase 服务端，如果 hbase 服务端 ok 可以开放这里
+//        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
+//        try {
+//            Put put = new Put(Bytes.toBytes(rowKey));
+//            for (Map.Entry<String, String> entry : columns.entrySet()) {
+//                put.addColumn(
+//                        Bytes.toBytes(columnFamily),
+//                        Bytes.toBytes(entry.getKey()),
+//                        Bytes.toBytes(entry.getValue())
+//                );
+//            }
+//            table.put(put);
+//        } finally {
+//            table.close();
+//        }
     }
 
     /**
@@ -58,22 +60,25 @@ public class HbaseServiceImpl implements IHbaseService {
      */
     @SneakyThrows
     public Map<String, String> getData(String tableName, String rowKey, String columnFamily) {
-        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
-        try {
-            Get get = new Get(Bytes.toBytes(rowKey));
-            get.addFamily(Bytes.toBytes(columnFamily));
-            Result result = table.get(get);
+        // ⬇️ 因为没有 hbase 服务端，如果 hbase 服务端 ok 可以开放这里
+//        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
+//        try {
+//            Get get = new Get(Bytes.toBytes(rowKey));
+//            get.addFamily(Bytes.toBytes(columnFamily));
+//            Result result = table.get(get);
+//
+//            Map<String, String> resultMap = new java.util.HashMap<>();
+//            for (Cell cell : result.listCells()) {
+//                String qualifier = Bytes.toString(CellUtil.cloneQualifier(cell));
+//                String value = Bytes.toString(CellUtil.cloneValue(cell));
+//                resultMap.put(qualifier, value);
+//            }
+//            return resultMap;
+//        } finally {
+//            table.close();
+//        }
 
-            Map<String, String> resultMap = new java.util.HashMap<>();
-            for (Cell cell : result.listCells()) {
-                String qualifier = Bytes.toString(CellUtil.cloneQualifier(cell));
-                String value = Bytes.toString(CellUtil.cloneValue(cell));
-                resultMap.put(qualifier, value);
-            }
-            return resultMap;
-        } finally {
-            table.close();
-        }
+        return null;
     }
 
     /**
@@ -85,30 +90,33 @@ public class HbaseServiceImpl implements IHbaseService {
      */
     @SneakyThrows
     public List<Map<String, String>> scanTable(String tableName, String columnFamily) {
-        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
-        try {
-            Scan scan = new Scan();
-            scan.addFamily(Bytes.toBytes(columnFamily));
+        // ⬇️ 因为没有 hbase 服务端，如果 hbase 服务端 ok 可以开放这里
+//        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
+//        try {
+//            Scan scan = new Scan();
+//            scan.addFamily(Bytes.toBytes(columnFamily));
+//
+//            ResultScanner scanner = table.getScanner(scan);
+//            List<Map<String, String>> resultList = new ArrayList<>();
+//
+//            for (Result result : scanner) {
+//                String rowKey = Bytes.toString(result.getRow());
+//                Map<String, String> rowMap = new java.util.HashMap<>();
+//                rowMap.put("_rowkey", rowKey);
+//
+//                for (Cell cell : result.listCells()) {
+//                    String qualifier = Bytes.toString(CellUtil.cloneQualifier(cell));
+//                    String value = Bytes.toString(CellUtil.cloneValue(cell));
+//                    rowMap.put(qualifier, value);
+//                }
+//                resultList.add(rowMap);
+//            }
+//            return resultList;
+//        } finally {
+//            table.close();
+//        }
 
-            ResultScanner scanner = table.getScanner(scan);
-            List<Map<String, String>> resultList = new ArrayList<>();
-
-            for (Result result : scanner) {
-                String rowKey = Bytes.toString(result.getRow());
-                Map<String, String> rowMap = new java.util.HashMap<>();
-                rowMap.put("_rowkey", rowKey);
-
-                for (Cell cell : result.listCells()) {
-                    String qualifier = Bytes.toString(CellUtil.cloneQualifier(cell));
-                    String value = Bytes.toString(CellUtil.cloneValue(cell));
-                    rowMap.put(qualifier, value);
-                }
-                resultList.add(rowMap);
-            }
-            return resultList;
-        } finally {
-            table.close();
-        }
+        return null;
     }
 
     /**
@@ -119,12 +127,13 @@ public class HbaseServiceImpl implements IHbaseService {
      */
     @SneakyThrows
     public void deleteData(String tableName, String rowKey) {
-        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
-        try {
-            Delete delete = new Delete(Bytes.toBytes(rowKey));
-            table.delete(delete);
-        } finally {
-            table.close();
-        }
+        // ⬇️ 因为没有 hbase 服务端，如果 hbase 服务端 ok 可以开放这里
+//        Table table = hbaseConn.getTable(TableName.valueOf(tableName));
+//        try {
+//            Delete delete = new Delete(Bytes.toBytes(rowKey));
+//            table.delete(delete);
+//        } finally {
+//            table.close();
+//        }
     }
 }

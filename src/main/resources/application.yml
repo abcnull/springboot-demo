@@ -1,6 +1,6 @@
 # 应用服务 WEB 访问端口
 server:
-  port: 8080
+  port: 8081
 
 # 数据源配置
 spring:
@@ -55,22 +55,24 @@ spring:
   #    listener:
   #      ack-mode: MANUAL  # 关键配置！
 
-  # mongodb
-  data:
-    mongodb:
-      uri: mongodb://app-user:${MONGODB_PASSWORD}@mongo-prod.example.com:27017/mydb?ssl=true&authSource=admin&retryWrites=true&retryReads=true&applicationName=production-app-springboot-demo
-      host: mongo-prod.example.com
-      port: 27017
-      database: mydb
-      username: app-user
-      password: "strongPassword123!"
-      authentication-database: admin
+  # ⬇️ 因为 mongodb 服务端没有启动，这里注释掉，否则会报错，当你存在 mongo 服务端，你这里会要开放并做好配置
+#  # mongodb
+#  data:
+#    mongodb:
+#      uri: mongodb://app-user:${MONGODB_PASSWORD}@mongo-prod.example.com:27017/mydb?ssl=true&authSource=admin&retryWrites=true&retryReads=true&applicationName=production-app-springboot-demo
+#      host: mongo-prod.example.com
+#      port: 27017
+#      database: mydb
+#      username: app-user
+#      password: "strongPassword123!"
+#      authentication-database: admin
 
-  # elasticsearch
-  elasticsearch:
-    uris: http://localhost:9200
-    username: elastic
-    password: your_secure_password
+  # ⬇️ 因为 es 服务端没有启动，这里注释掉，否则会报错，当你存在 es 服务端，你这里会要开放并做好配置
+#  # elasticsearch
+#  elasticsearch:
+#    uris: http://localhost:9200
+#    username: elastic
+#    password: your_secure_password
 
   # Hive 数据源配置
   hive:
@@ -90,30 +92,30 @@ spring:
 
   # clickhouse
   clickhouse:
-    clickhouse:
-      # 推荐：直接在URL中包含认证信息
-      url: jdbc:clickhouse://your-clickhouse-server:8123/your_database?user=default&password=your_password&socket_timeout=60000&connection_timeout=30000
+    # 推荐：直接在URL中包含认证信息
+    url: jdbc:clickhouse://your-clickhouse-server:8123/your_database?user=default&password=your_password&socket_timeout=60000&connection_timeout=30000
 
-  # 安全配置
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak: # 可以是任何 OAuth2 提供者如 azure、okta、自定义等
-            client-id: ${SSO_CLIENT_ID:my-app-client-id} # 客户端 ID
-            client-secret: ${SSO_CLIENT_SECRET:my-app-client-secret} # 客户端密钥
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak" # keycloak 验证用户在登录界面输出的密码后，让 browser 重定向的地址
-            authorization-grant-type: authorization_code
-            scope: openid,profile,email,roles
-        provider:
-          keycloak:
-            issuer-uri: ${SSO_ISSUER_URI:http://auth.example.com/auth/realms/my-realm} # 认证中心地址
-            user-name-attribute: preferred_username
-# 应用特定配置
-app:
-  security:
-    # 登出后重定向到SSO登出端点，实现全局登出
-    logout-success-url: ${SSO_LOGOUT_URL:http://auth.example.com/auth/realms/my-realm/protocol/openid-connect/logout?redirect_uri={baseUrl}}
+  # ⬇️ 因为 sso 授权中心没有启动，这里注释掉，否则会报错，当你存在 sso 授权中心，你这里会要开放并做好配置
+#  # sso 配置
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          keycloak: # 可以是任何 OAuth2 提供者如 azure、okta、自定义等
+#            client-id: ${SSO_CLIENT_ID:my-app-client-id} # 客户端 ID
+#            client-secret: ${SSO_CLIENT_SECRET:my-app-client-secret} # 客户端密钥
+#            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak" # keycloak 验证用户在登录界面输出的密码后，让 browser 重定向的地址
+#            authorization-grant-type: authorization_code
+#            scope: openid,profile,email,roles
+#        provider:
+#          keycloak:
+#            issuer-uri: ${SSO_ISSUER_URI:http://auth.example.com/auth/realms/my-realm} # 认证中心地址
+#            user-name-attribute: preferred_username
+## 应用特定配置
+#app:
+#  security:
+#    # 登出后重定向到SSO登出端点，实现全局登出
+#    logout-success-url: ${SSO_LOGOUT_URL:http://auth.example.com/auth/realms/my-realm/protocol/openid-connect/logout?redirect_uri={baseUrl}}
 
 # 下面这些内容是为了让 MyBatis 映射
 mybatis:
@@ -139,11 +141,12 @@ pagehelper:
   # true 表示：当 pageSize=0 或 RowBounds.limit=0 时，查询全部结果
   page-size-zero: false
 
-# 服务注册中心（要连接到注册中心，为了调用微服务，和向注册中心注册自身服务）
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+# ⬇️ 因为 eureka 服务端没有启动，这里注释掉，否则会报错，当你存在 eureka 服务端，你这里要开放并做好配置
+## 服务注册中心（要连接到注册中心，为了调用微服务，和向注册中心注册自身服务）
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
 
 # springboot 自带的 logback 的日志配置
 logging:

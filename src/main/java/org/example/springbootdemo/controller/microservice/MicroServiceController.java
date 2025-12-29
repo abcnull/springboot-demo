@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+//import org.springframework.web.client.RestTemplate;
 
 /**
  * 微服务调用 controller
@@ -30,8 +30,9 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/microservice")
 public class MicroServiceController {
-    @Autowired
-    private RestTemplate restTemplate;
+    // ⬇️ 因为 eureka 服务端没有启动，这里注释掉，否则会报错，当你存在 eureka 服务端，你这里要开放并做好配置
+//    @Autowired
+//    private RestTemplate restTemplate;
 
     /**
      * 其中进行了远程调用
@@ -41,8 +42,11 @@ public class MicroServiceController {
      */
     @GetMapping("/invoke")
     public String invoke() {
-        // 使用服务名"user-service"，而不是IP:端口，来访问 user-service 用户服务中的 users 接口
-        return restTemplate.getForObject("http://user-service/users", String.class);
+        // ⬇️ 因为 eureka 服务端没有启动，这里注释掉，否则会报错，当你存在 eureka 服务端，你这里要开放并做好配置
+//        // 使用服务名"user-service"，而不是IP:端口，来访问 user-service 用户服务中的 users 接口
+//        return restTemplate.getForObject("http://user-service/users", String.class);
+
+        return null;
     }
 
 }

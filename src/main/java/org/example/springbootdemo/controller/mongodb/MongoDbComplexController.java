@@ -68,8 +68,7 @@ public class MongoDbComplexController {
      */
     // 为特定产品增加标签
     @PostMapping("/update/tag")
-    public String updateTagById(
-            @RequestParam String productId, @RequestParam String newTag) {
+    public String updateTagById(@RequestParam String productId, @RequestParam String newTag) {
 
         mongoDbService.addTagToProduct(productId, newTag);
         return "success";
@@ -79,9 +78,8 @@ public class MongoDbComplexController {
      * UPDATE MULTIPLY
      */
     // 指定产品的原子性价格更新（打折）
-    @PostMapping("/update/tag")
-    public String updatePriceById(
-            @RequestParam String productId, @RequestParam Double discountRate) {
+    @PostMapping("/update/discount")
+    public String updatePriceById(@RequestParam String productId, @RequestParam Double discountRate) {
 
         mongoDbService.applyDiscount(productId, discountRate);
         return "success";

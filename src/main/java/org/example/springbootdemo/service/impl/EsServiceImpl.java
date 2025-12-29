@@ -2,10 +2,11 @@ package org.example.springbootdemo.service.impl;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.example.springbootdemo.esdao.ProductRepository;
+//import org.example.springbootdemo.esdao.ProductRepository;
 import org.example.springbootdemo.esmodel.Product;
 import org.example.springbootdemo.service.IEsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -38,9 +39,11 @@ import java.util.stream.Collectors;
  */
 @Service
 public class EsServiceImpl implements IEsService {
-    // 可以使用自定义的 repository 这个 dao 层来进行查询
-    @Autowired
-    private ProductRepository productRepository;
+    // ⬇️ 为了服务端启动，这里注释掉，当你真的存在 es 服务端时候，yml 中设置好连接，这里解开注释
+//    // 可以使用自定义的 repository 这个 dao 层来进行查询
+//    @Autowired
+//    @Qualifier("esProductRepository") // 指定使用哪个 bean
+//    private ProductRepository productRepository;
 
     // 可以使用 ElasticsearchRestTemplate 这个模版来做一些复杂的查询
     @Autowired
@@ -51,22 +54,30 @@ public class EsServiceImpl implements IEsService {
     // 存储商品，已有 save 方法
     // 其实写入时，可以直接操作 es 写入，开发中也有用传入 Kafka 后，消费者拿到消息再写入 es 的，如果通过消息的方式就可以解放生产者服务和 es 存储的耦合避免 es 存储失败而导致写入服务后续阻碍
     public Product save(Product product) {
-        return productRepository.save(product);
+        // ⬇️ 为了服务端启动，这里注释掉，当你真的存在 es 服务端时候，yml 中设置好连接，这里解开注释
+//        return productRepository.save(product);
+        return null;
     }
 
     // 关键词搜索，自定义 findByNameContaining 方法
     public List<Product> searchProducts(String keyword) {
-        return productRepository.findByNameContaining(keyword);
+        // ⬇️ 为了服务端启动，这里注释掉，当你真的存在 es 服务端时候，yml 中设置好连接，这里解开注释
+//        return productRepository.findByNameContaining(keyword);
+        return null;
     }
 
     // 依据分类和价格区间查询，自定义 findByCategoryAndPriceBetween 方法
     public List<Product> filterByCategoryAndPrice(String category, double minPrice, double maxPrice) {
-        return productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+        // ⬇️ 为了服务端启动，这里注释掉，当你真的存在 es 服务端时候，yml 中设置好连接，这里解开注释
+//        return productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+        return null;
     }
 
     // 批量保存商品，已有 saveAll 方法
     public Iterable<Product> saveAll(List<Product> products) {
-        return productRepository.saveAll(products);
+        // ⬇️ 为了服务端启动，这里注释掉，当你真的存在 es 服务端时候，yml 中设置好连接，这里解开注释
+//        return productRepository.saveAll(products);
+        return null;
     }
 
     /* ========== template ========== */

@@ -4,10 +4,11 @@ import com.mongodb.client.model.Indexes;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.operators.relational.GeometryDistance;
-import org.example.springbootdemo.mongodbdao.ProductRepository;
+//import org.example.springbootdemo.mongodbdao.ProductRepository;
 import org.example.springbootdemo.mongodbmodel.Product;
 import org.example.springbootdemo.service.IMongoDbService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.geo.Box;
 import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
@@ -46,13 +47,16 @@ public class MongoDbServiceImp implements IMongoDbService {
     MongoTemplate，更灵活，支持复杂查询和聚合操作，运行时构建查询条件，可以精确控制查询行为，适合复杂查询/动态查询/性能优化
     * */
 
-    // 简单 CRUD 场景时候使用自定义 ProductRepository
-    @Autowired // 注入Repository，类似于注入MyBatis的Mapper
-    private ProductRepository productRepository;
+    // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//    // 简单 CRUD 场景时候使用自定义 ProductRepository
+//    @Autowired // 注入Repository，类似于注入MyBatis的Mapper
+//    @Qualifier("mongoProductRepository") // 指定哪个 bean
+//    private ProductRepository productRepository;
 
-    // 复杂查询时使用 MongoTemplate
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//    // 复杂查询时使用 MongoTemplate
+//    @Autowired
+//    private MongoTemplate mongoTemplate;
 
     /**
      * 方式一：@Indexed(GeoSpatialIndexType.GEO_2DSPHERE)  // 创建地理空间索引
@@ -68,8 +72,9 @@ public class MongoDbServiceImp implements IMongoDbService {
     // 创建地理位置索引（需要在应用启动时执行一次）
     @PostConstruct
     public void createGeoIndex() {
-        mongoTemplate.createCollection(Product.class);
-        mongoTemplate.getCollection("products").createIndex(Indexes.geo2dsphere("location"));
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        mongoTemplate.createCollection(Product.class);
+//        mongoTemplate.getCollection("products").createIndex(Indexes.geo2dsphere("location"));
     }
 
     /* ========= repository ========= */
@@ -77,152 +82,194 @@ public class MongoDbServiceImp implements IMongoDbService {
     // 保存产品
     // 使用了已有的 MongoRepository 的 save() 能力
     public Product saveProduct(Product product) {
-        // 在MongoDB中，如果id不存在会创建新文档，存在则更新
-        return productRepository.save(product);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        // 在MongoDB中，如果id不存在会创建新文档，存在则更新
+//        return productRepository.save(product);
+        return null;
     }
 
     // 获取所有产品
     // 使用了已有的 MongoRepository 的 findAll() 能力
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.findAll();
+        return null;
     }
 
     // 根据ID查找产品
     // 使用了已有的 MongoRepository 的 findById() 能力
     public Optional<Product> getProductById(String id) {
-        return productRepository.findById(id);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.findById(id);
+        return null;
     }
 
     // 根据名称查找产品
     // 使用了自定义的 ProductRepository 的 findByName() 能力
     public List<Product> getProductsByName(String name) {
-        return productRepository.findByName(name);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.findByName(name);
+        return null;
     }
 
     // 根据价格范围查找产品
     // 使用了自定义的 ProductRepository 的 findProductsByPriceRange() 能力
     public List<Product> getProductsByPriceRange(Double minPrice, Double maxPrice) {
-        return productRepository.findProductsByPriceRange(minPrice, maxPrice);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.findProductsByPriceRange(minPrice, maxPrice);
+        return null;
     }
 
     // 根据分类查找产品
     // 使用了自定义的 ProductRepository 的 findByCategory() 能力
     public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategory(category);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.findByCategory(category);
+        return null;
     }
 
     // 删除产品
     // 使用了已有的 MongoRepository 的 deleteById() 能力
     public void deleteProduct(String id) {
-        productRepository.deleteById(id);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        productRepository.deleteById(id);
     }
 
     // 根据标签查找产品
     // 使用了自定义的 ProductRepository 的 findByTag() 能力
     public List<Product> getProductsByTag(String tag) {
-        return productRepository.findByTag(tag);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.findByTag(tag);
+        return null;
     }
 
     // 更新产品信息
     // 使用了已有的 MongoRepository 的 save() 能力
     public Product updateProduct(String id, Product updatedProduct) {
-        updatedProduct.setId(id); // 确保ID不变
-        return productRepository.save(updatedProduct);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        updatedProduct.setId(id); // 确保ID不变
+//        return productRepository.save(updatedProduct);
+        return null;
     }
 
     // 统计某个分类的产品数量
     // 使用了自定义的 ProductRepository 的 countByCategory() 能力
     public long countProductsByCategory(String category) {
-        return productRepository.countByCategory(category);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        return productRepository.countByCategory(category);
+        return 0;
     }
 
     /* ========= template ========= */
 
     // 示例1: 动态价格范围查询
     public List<Product> findProductsByPriceRange(Double minPrice, Double maxPrice) {
-        Query query = new Query();
-        // select: where -> gte/lte
-        query.addCriteria(Criteria.where("price").gte(minPrice).lte(maxPrice));
-        // find
-        return mongoTemplate.find(query, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        Query query = new Query();
+//        // select: where -> gte/lte
+//        query.addCriteria(Criteria.where("price").gte(minPrice).lte(maxPrice));
+//        // find
+//        return mongoTemplate.find(query, Product.class);
+
+        return null;
     }
 
     // 示例2: 模糊搜索产品名称
     public List<Product> findProductsByNameLike(String namePattern) {
-        Query query = new Query();
-        // select: where -> regex
-        query.addCriteria(Criteria.where("name").regex(namePattern, "i"));
-        // find
-        return mongoTemplate.find(query, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        Query query = new Query();
+//        // select: where -> regex
+//        query.addCriteria(Criteria.where("name").regex(namePattern, "i"));
+//        // find
+//        return mongoTemplate.find(query, Product.class);
+
+        return null;
     }
 
     // 示例3: 批量更新分类产品的价格
     public void updateProductPriceByCategory(String category, Double priceIncrease) {
-        // select: where -> is
-        Query query = new Query(Criteria.where("category").is(category));
-        // update: where -> inc
-        Update update = new Update().inc("price", priceIncrease);
-        // updateMulti
-        mongoTemplate.updateMulti(query, update, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        // select: where -> is
+//        Query query = new Query(Criteria.where("category").is(category));
+//        // update: where -> inc
+//        Update update = new Update().inc("price", priceIncrease);
+//        // updateMulti
+//        mongoTemplate.updateMulti(query, update, Product.class);
     }
 
     // 示例4: 为特定产品增加标签
     public void addTagToProduct(String productId, String newTag) {
-        // select: where -> is
-        Query query = new Query(Criteria.where("_id").is(productId));
-        // update: where -> push
-        Update update = new Update().push("tags", newTag); // push是追加元素到数组
-        // updateFirst
-        mongoTemplate.updateFirst(query, update, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        // select: where -> is
+//        Query query = new Query(Criteria.where("_id").is(productId));
+//        // update: where -> push
+//        Update update = new Update().push("tags", newTag); // push是追加元素到数组
+//        // updateFirst
+//        mongoTemplate.updateFirst(query, update, Product.class);
     }
 
     // 示例5: 统计某分类产品数量
     public long countProductsByCategory2(String category) {
-        // select: where -> is
-        Query query = new Query(Criteria.where("category").is(category));
-        // count
-        return mongoTemplate.count(query, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        // select: where -> is
+//        Query query = new Query(Criteria.where("category").is(category));
+//        // count
+//        return mongoTemplate.count(query, Product.class);
+
+        return 0;
     }
 
     // 示例6: 原子性价格更新（打折）
     public boolean applyDiscount(String productId, Double discountRate) {
-        // select: where -> is
-        Query query = new Query(Criteria.where("_id").is(productId));
-        // update: where -> multiply
-        Update update = new Update().multiply("price", (1 - discountRate)); // multiply是乘法运算
-        // updateFirst
-        UpdateResult result = mongoTemplate.updateFirst(query, update, Product.class);
-        return result.getModifiedCount() > 0;
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        // select: where -> is
+//        Query query = new Query(Criteria.where("_id").is(productId));
+//        // update: where -> multiply
+//        Update update = new Update().multiply("price", (1 - discountRate)); // multiply是乘法运算
+//        // updateFirst
+//        UpdateResult result = mongoTemplate.updateFirst(query, update, Product.class);
+//        return result.getModifiedCount() > 0;
+
+        return false;
     }
 
     /* ========= geo ========= */
 
     // 1. 查找附近店铺（5公里内）
     public List<Product> findProductsNearby(double longitude, double latitude, double radiusInKm) {
-        Query query = new Query();
-        // nearSphere表示球面距离计算，更准确
-        query.addCriteria(Criteria.where("location")
-                .nearSphere(new Point(longitude, latitude))
-                .maxDistance(radiusInKm / 6378.1)); // 转换为弧度
-        return mongoTemplate.find(query, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        Query query = new Query();
+//        // nearSphere表示球面距离计算，更准确
+//        query.addCriteria(Criteria.where("location")
+//                .nearSphere(new Point(longitude, latitude))
+//                .maxDistance(radiusInKm / 6378.1)); // 转换为弧度
+//        return mongoTemplate.find(query, Product.class);
+
+        return null;
     }
 
     // 2. 查找矩形区域内的店铺
     public List<Product> findProductsInArea(double minLng, double minLat, double maxLng, double maxLat) {
-        Query query = new Query();
-        // withinBox 定义一个矩形区域
-        query.addCriteria(Criteria.where("location")
-                .within(new Box(new Point(minLng, minLat), new Point(maxLng, maxLat))));
-        return mongoTemplate.find(query, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        Query query = new Query();
+//        // withinBox 定义一个矩形区域
+//        query.addCriteria(Criteria.where("location")
+//                .within(new Box(new Point(minLng, minLat), new Point(maxLng, maxLat))));
+//        return mongoTemplate.find(query, Product.class);
+
+        return null;
     }
 
     // 3. 查找圆形区域内的店铺
     public List<Product> findProductsInCircle(double centerLng, double centerLat, double radiusInKm) {
-        Query query = new Query();
-        // centerSphere定义一个圆形区域
-        query.addCriteria(Criteria.where("location")
-                .withinSphere(new Circle(new Point(centerLng, centerLat), radiusInKm / 6378.1)));
-        return mongoTemplate.find(query, Product.class);
+        // ⬇️ 因为没有 mongodb 服务端，如果 mongo 服务端 ok 可以开放这里
+//        Query query = new Query();
+//        // centerSphere定义一个圆形区域
+//        query.addCriteria(Criteria.where("location")
+//                .withinSphere(new Circle(new Point(centerLng, centerLat), radiusInKm / 6378.1)));
+//        return mongoTemplate.find(query, Product.class);
+
+        return null;
     }
 
     // 4. 手动计算两点间距离（Haversine公式）
