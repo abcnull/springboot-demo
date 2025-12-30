@@ -885,12 +885,12 @@ public class UserController {
 `MediaCallbackController` 中演示了实际业务中客户端，多媒体服务，和自己（业务服务）之间怎么交互的
 
 当存在客户端开发，多媒体服务能力，以及业务服务能力，在音视频信息场景下三者如何交互：
-客户端 (SEI) -> 多媒体服 (回调业务 HTTP 接口) -> 业务 HTTP 接口承接 (CMD 命令) -> 客户端
+客户端 (SEI) -> 多媒体服务 (调业务 HTTP/rpc 接口) -> 业务 HTTP/rpc 接口承接 (CMD 命令) -> 客户端
 
 详细描述：
 1. 客户端对多媒体发送 SEI 信息
-2. 多媒体处理 SEI 信息，并且回调一个业务服务的 http 接口，然后把关键信息带给业务（业务 http 接口如下 `/sei/callback`）
-3. 业务此回调接口 `/sei/callback` 中进行一些业务处理
+2. 多媒体处理 SEI 信息，并且调一个业务服务的 http/rpc 接口，然后把关键信息带给业务（这里写的是业务 http 接口如下 `/sei/callback`）
+3. 业务此接口 `/sei/callback` 中进行一些业务处理，再执行 CMD 命令
 ``` java
 // 业务 http 接口 /sei/callback
 @PostMapping("/sei/callback")
@@ -919,7 +919,7 @@ public String handleSeiCallback(@RequestBody SeiCallbackRequest request) {
     }
 }
 ```
-3. 其中会执行 cmd 命令向客户端发送消息。执行 cmd 命令本质是因为前期业务服务侧已经和客户端建立了 websocket 连接了，项目中通过 `WebSocketConfig` 做一个配置类，service 层通过注入 `messagingTemplate` 即可操作向客户端发送 cmd 命令来通信
+4. 其中会执行 cmd 命令向客户端发送消息。执行 cmd 命令本质是因为前期业务服务侧已经和客户端建立了 websocket 连接了，项目中通过 `WebSocketConfig` 做一个配置类，service 层通过注入 `messagingTemplate` 即可操作向客户端发送 cmd 命令来通信
 ``` java
 @Configuration
 @EnableWebSocketMessageBroker
@@ -948,4 +948,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 }
 ```
-4. 该 http 最后返回响应结果给多媒体服务侧
+5. 该 http 最后返回响应结果给多媒体服务侧
